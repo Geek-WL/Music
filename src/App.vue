@@ -1,17 +1,19 @@
 <template>
   <div id="app">
-    <div class="t"></div>
+    <Header></Header>
   </div>
 </template>
 
 <script>
-
+import Header from './components/Header'
+export default {
+  name: 'App',
+  components: {
+    Header
+  }
+}
 </script>
 
-<style lang="scss">
-  .t {
-    width: 100px;
-    height: 100px;
-    background: red;
-  }
+<style scoped lang="scss">
+
 </style>
