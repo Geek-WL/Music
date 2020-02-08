@@ -15,7 +15,7 @@
   overflow: hidden;
   white-space: nowrap;
 }
-// 限制行数
+// 限制文字行数
 @mixin clamp($row){
   overflow:hidden;
   text-overflow:ellipsis;
@@ -24,7 +24,7 @@
   -webkit-line-clamp:$row;
 }
 
-// 根据属性选择器来设置背景颜色
+// 根据属性选择器来设置背景颜色 header背景颜色
 @mixin bg_color(){
   background: $background-color-theme;
   [data-theme=theme1] & {
@@ -34,6 +34,7 @@
     background: $background-color-theme2;
   }
 }
+// tabbar背景颜色
 @mixin bg_sub_color(){
   background: $background-color-sub-theme;
   [data-theme=theme1] & {

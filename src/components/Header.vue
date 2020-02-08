@@ -1,7 +1,7 @@
 <template>
   <div class="header" @click="changeTheme">
     <div class="header-left"></div>
-    <p class="header-title">知播渔音乐</p>
+    <p class="header-title">网易云音乐</p>
     <div class="header-right"></div>
   </div>
 </template>
