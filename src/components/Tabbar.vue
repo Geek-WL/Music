@@ -31,6 +31,8 @@ export default {
   display: flex;
   justify-content: space-around;
   line-height: 84px;
+  /*position: relative;*/
+  /*z-index: 666;*/
   .item {
     span {
       @include font_size($font_medium_s);
