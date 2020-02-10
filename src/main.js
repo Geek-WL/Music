@@ -3,10 +3,14 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import fastclick from 'fastclick'
+import VueLazyload from 'vue-lazyload'
 import './assets/css/base.scss'
 
 fastclick.attach(document.body)
 Vue.config.productionTip = false
+Vue.use(VueLazyload, {
+  loading: require('./assets/images/loading.png')
+})
 
 new Vue({
   router,
