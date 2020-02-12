@@ -14,7 +14,6 @@
 
 <script>
 import 'swiper/dist/css/swiper.css'
-
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
   name: 'Banner',
@@ -64,7 +63,7 @@ export default {
 
 <!--以下代码是为了覆盖swiper-pagination-bullet在swiper中的默认样式,由于上一个style中有scoped,无法覆盖,因此新增以下style-->
 <style lang="scss">
-  @import "src/assets/css/mixin";
+  @import "../../assets/css/mixin";
   .banner {
     .swiper-pagination-bullet {
       width: 16px;

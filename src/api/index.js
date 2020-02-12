@@ -8,5 +8,7 @@ export const getPersonalized = () => Network.get('personalized?limit=6')
 export const getNewAlbum = () => Network.get('album/newest')
 // 获取最新音乐数据
 export const getNewSong = () => Network.get('personalized/newsong')
-// 获取歌单详情页数据
+// 获取推荐歌单详情页数据
 export const getPlayList = (data) => Network.get('playlist/detail', data)
+// 获取最新专辑详情页数据
+export const getAlbum = (data) => Network.get('album', data)

@@ -27,9 +27,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "src/assets/css/variable";
-  @import "src/assets/css/mixin";
+  @import "../../assets/css/variable";
+  @import "../../assets/css/mixin";
 .detail-bottom {
+  //@include bg_sub_color;
+  /*border-top-left-radius: 50px;*/
+  /*border-top-right-radius: 50px;*/
+  /*overflow: hidden;*/
   li {
     width: 100%;
     height: 100px;
@@ -46,7 +50,7 @@ export default {
     .bottom-icon {
       width: 60px;
       height: 60px;
-      @include bg_img('../assets/images/small_play');
+      @include bg_img('../../assets/images/small_play');
       margin-right: 20px;
     }
     .bottom-title {
@@ -57,7 +61,7 @@ export default {
   .item {
     h3 {
       @include font_color();
-      @include font_size($font_medium)
+      @include font_size($font_medium);
     }
     p {
       margin-top: 10px;

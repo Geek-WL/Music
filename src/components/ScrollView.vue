@@ -8,10 +8,21 @@
 import IScroll from 'iscroll/build/iscroll-probe'
 export default {
   name: 'ScrollView',
+  methods: {
+    // 提供一个监听滚动距离的方法给外界使用
+    scrolling (fn) {
+      this.iscroll.on('scroll', function () {
+        // this.y为滚动的垂直距离
+        // 往下拉为正数  反之为负数
+        fn(this.y)
+      })
+    }
+  },
   mounted () {
     this.iscroll = new IScroll(this.$refs.wrapper, {
-      mouseWheel: true,
+      mouseWheel: true, // 侦听鼠标滚轮事件。
       scrollbars: false, // 是否显示滚动条
+      probeType: 3, // 监听滚动的位置
       // 解决拖拽卡顿问题
       scrollX: false,
       scroll: true,
