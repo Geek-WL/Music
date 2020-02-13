@@ -2,7 +2,7 @@
     <swiper :options="swiperOption" class="banner">
       <swiper-slide class="cd">
         <div class="cd-wrapper">
-          <img src="" alt="">
+          <img src="http://p1.music.126.net/5vf3VOG7VppGmMHqQSKgQA==/109951164701857091.jpg?imageView&quality=89" alt="">
         </div>
         <p>sadasdsadasd</p>
       </swiper-slide>
@@ -112,6 +112,7 @@ export default {
       height: 500px;
       border-radius: 50%;
       border: 30px solid #fff;
+      overflow: hidden;
       img {
         width: 100%;
         height: 100%;
