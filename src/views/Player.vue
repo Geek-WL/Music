@@ -1,29 +1,25 @@
 <template>
     <div class="player">
-      <PlayerHeader></PlayerHeader>
-      <PlayerMiddle></PlayerMiddle>
+      <NormalPlayer></NormalPlayer>
+      <MiniPlayer></MiniPlayer>
+      <ListPlayer></ListPlayer>
     </div>
 </template>
 
 <script>
-import PlayerHeader from '../components/Player/PlayerHeader'
-import PlayerMiddle from '../components/Player/PlayerMiddle'
+import NormalPlayer from '../components/Player/NormalPlayer'
+import MiniPlayer from '../components/Player/MiniPlayer'
+import ListPlayer from '../components/Player/ListPlayer'
 export default {
   name: 'Player',
   components: {
-    PlayerHeader,
-    PlayerMiddle
+    NormalPlayer,
+    MiniPlayer,
+    ListPlayer
   }
 }
 </script>
 
 <style scoped lang="scss">
-.player {
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  background: skyblue;
-}
+
 </style>
