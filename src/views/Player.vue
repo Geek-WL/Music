@@ -2,7 +2,7 @@
     <div class="player">
       <NormalPlayer></NormalPlayer>
       <MiniPlayer></MiniPlayer>
-      <ListPlayer></ListPlayer>
+      <ListPlayer ref="listplayer"></ListPlayer>
     </div>
 </template>
 

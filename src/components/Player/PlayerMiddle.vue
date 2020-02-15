@@ -1,7 +1,7 @@
 <template>
     <swiper :options="swiperOption" class="banner">
       <swiper-slide class="cd">
-        <div class="cd-wrapper">
+        <div class="cd-wrapper" ref="cdwrapper">
           <img src="http://p1.music.126.net/5vf3VOG7VppGmMHqQSKgQA==/109951164701857091.jpg?imageView&quality=89" alt="">
         </div>
         <p>sadasdsadasd</p>
@@ -70,6 +70,7 @@
 import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import ScrollView from '../ScrollView'
+import { mapGetters } from 'vuex'
 export default {
   name: 'PlayerMiddle',
   components: {
@@ -90,6 +91,20 @@ export default {
         observer: true,
         observerParents: true,
         observerSlideChildren: true
+      }
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'isPlaying'
+    ])
+  },
+  watch: {
+    isPlaying (newValue, oldValue) {
+      if (newValue) {
+        this.$refs.cdwrapper.classList.add('active')
+      } else {
+        this.$refs.cdwrapper.classList.remove('active')
       }
     }
   }
@@ -117,6 +132,12 @@ export default {
         width: 100%;
         height: 100%;
       }
+      animation: sport 5s linear infinite;
+      // 设置动画状态为暂停
+      animation-play-state: paused;
+      &.active {
+      animation-play-state: running;
+    }
     }
     p {
       text-align: center;
@@ -137,6 +158,14 @@ export default {
     }
   }
 }
+  @keyframes sport {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 </style>
 <style lang="scss">
   @import "src/assets/css/mixin";
