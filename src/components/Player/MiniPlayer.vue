@@ -1,24 +1,75 @@
 <template>
-    <div class="mini-player">
-      <div class="player-wrapper">
-        <div class="player-left">
-          <img src="http://p1.music.126.net/5vf3VOG7VppGmMHqQSKgQA==/109951164701857091.jpg?imageView&quality=89" alt="">
-          <div class="title">
-            <h3>演员</h3>
-            <p>薛之谦</p>
+    <transition @enter="enter" @leave="leave" :css="false">
+      <div class="mini-player" v-show="this.isShowMiniPlayer">
+        <div class="player-wrapper">
+          <div class="player-left" @click.stop="showNormalPlayer">
+            <img src="http://p1.music.126.net/5vf3VOG7VppGmMHqQSKgQA==/109951164701857091.jpg?imageView&quality=89" ref="cd">
+            <div class="title">
+              <h3>演员</h3>
+              <p>薛之谦</p>
+            </div>
+          </div>
+          <div class="player-right">
+            <div class="play" @click="play" ref="play"></div>
+            <div class="list" @click.stop="showList"></div>
           </div>
         </div>
-        <div class="player-right">
-          <div class="play"></div>
-          <div class="list"></div>
-        </div>
       </div>
-    </div>
+    </transition>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+import Velocity from 'velocity-animate'
+import 'velocity-animate/velocity.ui'
+
 export default {
-  name: 'MiniPlayer'
+  name: 'MiniPlayer',
+  methods: {
+    showList () {
+      this.setListPlayer(true)
+    },
+    ...mapActions([
+      'setFullScreen',
+      'setMiniPlayer',
+      'setIsPlaying',
+      'setListPlayer'
+    ]),
+    showNormalPlayer () {
+      this.setFullScreen(true)
+      this.setMiniPlayer(false)
+    },
+    enter (el, done) {
+      Velocity(el, 'transition.bounceUpIn', { duration: 500 }, function () {
+        done()
+      })
+    },
+    leave (el, done) {
+      Velocity(el, 'transition.bounceDownOut', { duration: 500 }, function () {
+        done()
+      })
+    },
+    play () {
+      this.setIsPlaying(!this.isPlaying)
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'isShowMiniPlayer',
+      'isPlaying'
+    ])
+  },
+  watch: {
+    isPlaying (newValue, oldValue) {
+      if (newValue) {
+        this.$refs.play.classList.add('active')
+        this.$refs.cd.classList.add('active')
+      } else {
+        this.$refs.play.classList.remove('active')
+        this.$refs.cd.classList.remove('active')
+      }
+    }
+  }
 }
 </script>
 
@@ -47,6 +98,12 @@ export default {
         height: 100px;
         border-radius: 50%;
         margin-right: 20px;
+        animation: sport 5s linear infinite;
+        // 设置动画状态为暂停
+        animation-play-state: paused;
+        &.active {
+          animation-play-state: running;
+        }
       }
       .title {
         display: flex;
@@ -69,7 +126,10 @@ export default {
       .play {
         width: 84px;
         height: 84px;
-        @include bg_img('../../assets/images/play')
+        @include bg_img('../../assets/images/play');
+        &.active {
+          @include bg_img('../../assets/images/pause')
+        }
       }
       .list {
         width: 120px;
@@ -79,4 +139,12 @@ export default {
     }
   }
 }
+  @keyframes sport {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 </style>
