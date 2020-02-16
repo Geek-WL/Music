@@ -13,5 +13,24 @@ export default {
   },
   modeType (state) {
     return state.modeType
+  },
+  songs (state) {
+    return state.songs
+  },
+  currentSong (state) {
+    // 先定义一个空的obj，防止一进页面报错
+    let obj = {
+      id: null,
+      name: '',
+      singer: '',
+      prcUrl: null
+    }
+    if (state.songs.length !== 0) {
+      obj = state.songs[state.currentIndex]
+    }
+    return obj
+  },
+  currentLyric (state) {
+    return state.currentLyric
   }
 }

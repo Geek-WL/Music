@@ -15,32 +15,12 @@
             </div>
           </div>
           <div class="player-middle">
-            <ScrollView>
+            <ScrollView ref="scrollview">
               <ul>
-                <li class="item">
+                <li class="item" v-for="value in this.songs" :key="value.id">
                   <div class="item-left">
                     <div class="item-play" @click="play" ref="play"></div>
-                    <p>演员</p>
-                  </div>
-                  <div class="item-right">
-                    <div class="item-favorite"></div>
-                    <div class="item-del"></div>
-                  </div>
-                </li>
-                <li class="item">
-                  <div class="item-left">
-                    <div class="item-play"></div>
-                    <p>演员</p>
-                  </div>
-                  <div class="item-right">
-                    <div class="item-favorite"></div>
-                    <div class="item-del"></div>
-                  </div>
-                </li>
-                <li class="item">
-                  <div class="item-left">
-                    <div class="item-play"></div>
-                    <p>演员</p>
+                    <p>{{value.name}}</p>
                   </div>
                   <div class="item-right">
                     <div class="item-favorite"></div>
@@ -78,7 +58,8 @@ export default {
     ...mapGetters([
       'isPlaying',
       'modeType',
-      'isShowListPlayer'
+      'isShowListPlayer',
+      'songs'
     ])
   },
   methods: {
@@ -132,6 +113,11 @@ export default {
         this.$refs.mode.classList.remove('one')
         this.$refs.mode.classList.add('random')
       }
+    },
+    isShowListPlayer (newValue, oldValue) {
+      if (newValue) {
+        this.$refs.scrollview.refresh()
+      }
     }
   }
 }
@@ -184,6 +170,8 @@ export default {
       }
     }
     .player-middle {
+      height: 700px;
+      overflow: hidden;
       .item {
         height: 100px;
         display: flex;
@@ -191,7 +179,6 @@ export default {
         align-items: center;
         padding: 0 20px;
         box-sizing: border-box;
-
         border-top: 1px solid #ccc;
         .item-left {
           display: flex;

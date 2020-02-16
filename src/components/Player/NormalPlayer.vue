@@ -9,7 +9,7 @@
         <PlayerBottom></PlayerBottom>
       </div>
       <div class="player-bg">
-        <img src="http://p1.music.126.net/5vf3VOG7VppGmMHqQSKgQA==/109951164701857091.jpg?imageView&quality=89" alt="">
+        <img :src="currentSong.picUrl" alt="">
       </div>
     </div>
   </transition>
@@ -19,7 +19,7 @@
 import PlayerHeader from './PlayerHeader'
 import PlayerMiddle from './PlayerMiddle'
 import PlayerBottom from './PlayerBottom'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Velocity from 'velocity-animate'
 import 'velocity-animate/velocity.ui'
 export default {
@@ -31,7 +31,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isFullScreen'
+      'isFullScreen',
+      'currentSong'
     ])
   },
   methods: {
@@ -44,6 +45,15 @@ export default {
       Velocity(el, 'transition.shrinkOut', { duration: 500 }, function () {
         done()
       })
+    },
+    ...mapActions([
+      'getSongLyric'
+    ])
+  },
+  watch: {
+    // 监听目前歌曲变化 获取歌词数据
+    currentSong (newValue, oldValue) {
+      this.getSongLyric(newValue.id)
     }
   }
 }

@@ -63,7 +63,7 @@ export default {
       if (offsetY < 0) {
         // let scale = 10 * Math.abs(offsetY) / defaultHeight
         let scale = Math.floor(Math.abs(offsetY)) / defaultHeight
-        console.log(scale)
+        // console.log(scale)
         // 注意点：高斯模糊效果非常消耗性能，不推荐在移动端中使用
         //       如果非要在移动端中使用，那么建议只使用一次
         // this.$refs.top.$el.style.filter = `blur(${scale}px)`
