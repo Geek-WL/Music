@@ -12,3 +12,9 @@ export const getNewSong = () => Network.get('personalized/newsong')
 export const getPlayList = (data) => Network.get('playlist/detail', data)
 // 获取最新专辑详情页数据
 export const getAlbum = (data) => Network.get('album', data)
+// 获取歌曲详情数据
+export const getSongDetail = (data) => Network.get('song/detail', data)
+// 获取歌曲歌词
+export const getSongLyric = (data) => Network.get('lyric', data)
+// 获取音乐播放地址
+export const getSongURL = (data) => Network.get('song/url', data)

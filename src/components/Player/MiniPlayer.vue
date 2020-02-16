@@ -3,10 +3,10 @@
       <div class="mini-player" v-show="this.isShowMiniPlayer">
         <div class="player-wrapper">
           <div class="player-left" @click.stop="showNormalPlayer">
-            <img src="http://p1.music.126.net/5vf3VOG7VppGmMHqQSKgQA==/109951164701857091.jpg?imageView&quality=89" ref="cd">
+            <img :src="this.currentSong.picUrl" ref="cd">
             <div class="title">
-              <h3>演员</h3>
-              <p>薛之谦</p>
+              <h3>{{this.currentSong.name}}</h3>
+              <p>{{this.currentSong.singer}}</p>
             </div>
           </div>
           <div class="player-right">
@@ -56,7 +56,8 @@ export default {
   computed: {
     ...mapGetters([
       'isShowMiniPlayer',
-      'isPlaying'
+      'isPlaying',
+      'currentSong'
     ])
   },
   watch: {
@@ -109,7 +110,7 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
+        /*align-items: center;*/
         h3 {
           @include font_size($font_medium);
           @include font_color();

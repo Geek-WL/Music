@@ -16,6 +16,11 @@ export default {
         // 往下拉为正数  反之为负数
         fn(this.y)
       })
+    },
+    refresh () {
+      setTimeout(() => {
+        this.iscroll.refresh()
+      }, 1000)
     }
   },
   mounted () {
