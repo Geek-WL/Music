@@ -21,6 +21,9 @@ export default {
       setTimeout(() => {
         this.iscroll.refresh()
       }, 1000)
+    },
+    scrollTo (x, y, time) {
+      this.iscroll.scrollTo(x, y, time)
     }
   },
   mounted () {

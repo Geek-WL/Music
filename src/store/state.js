@@ -9,5 +9,7 @@ export default {
   songs: [],
   currentSong: {},
   currentIndex: 0,
-  currentLyric: []
+  currentLyric: [],
+  // 点击进度条之后新的开始播放时间
+  curTime: 0
 }

@@ -5,8 +5,8 @@
     <div class="normal-player" v-show="this.isFullScreen">
       <div class="player-wrapper">
         <PlayerHeader></PlayerHeader>
-        <PlayerMiddle></PlayerMiddle>
-        <PlayerBottom></PlayerBottom>
+        <PlayerMiddle :currentTime="currentTime"></PlayerMiddle>
+        <PlayerBottom :totalTime="totalTime" :currentTime="currentTime"></PlayerBottom>
       </div>
       <div class="player-bg">
         <img :src="currentSong.picUrl" alt="">
@@ -24,6 +24,18 @@ import Velocity from 'velocity-animate'
 import 'velocity-animate/velocity.ui'
 export default {
   name: 'NormalPlayer',
+  props: {
+    totalTime: {
+      type: Number,
+      default: 0,
+      required: true
+    },
+    currentTime: {
+      type: Number,
+      default: 0,
+      required: true
+    }
+  },
   components: {
     PlayerHeader,
     PlayerMiddle,
@@ -32,7 +44,8 @@ export default {
   computed: {
     ...mapGetters([
       'isFullScreen',
-      'currentSong'
+      'currentSong',
+      'songs'
     ])
   },
   methods: {
@@ -53,6 +66,7 @@ export default {
   watch: {
     // 监听目前歌曲变化 获取歌词数据
     currentSong (newValue, oldValue) {
+      if (this.songs.length === 0) return
       this.getSongLyric(newValue.id)
     }
   }
