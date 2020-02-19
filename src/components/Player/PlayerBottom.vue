@@ -1,20 +1,20 @@
 <template>
     <div class="player-bottom">
       <div class="bottom-progress">
-        <span>00:00</span>
-        <div class="progress-bar">
-          <div class="progress-line">
+        <span ref="eleCurrentTime">00:00</span>
+        <div class="progress-bar" @click="progressClick" ref="progressBar">
+          <div class="progress-line" ref="progressLine">
             <div class="progress-dot">
             </div>
           </div>
         </div>
-        <span>00:00</span>
+        <span ref="eleTatolTime">00:00</span>
       </div>
       <div class="bottom-controll">
         <div class="mode loop" @click="mode" ref="mode"></div>
-        <div class="prev"></div>
+        <div class="prev" @click="prev"></div>
         <div class="play" @click="play" ref="play"></div>
-        <div class="next"></div>
+        <div class="next" @click="next"></div>
         <div class="favorite"></div>
       </div>
     </div>
@@ -25,10 +25,24 @@ import { mapGetters, mapActions } from 'vuex'
 import modeType from '../../store/modeType'
 export default {
   name: 'PlayerBottom',
+  props: {
+    totalTime: {
+      type: Number,
+      default: 0,
+      required: true
+    },
+    currentTime: {
+      type: Number,
+      default: 0,
+      required: true
+    }
+  },
   methods: {
     ...mapActions([
       'setIsPlaying',
-      'setModeType'
+      'setModeType',
+      'setCurrentIndex',
+      'setCurTime'
     ]),
     play () {
       this.setIsPlaying(!this.isPlaying)
@@ -41,12 +55,63 @@ export default {
       } else if (this.modeType === modeType.random) {
         this.setModeType(modeType.loop)
       }
+    },
+    prev () {
+      this.setCurrentIndex(this.currentIndex - 1)
+    },
+    next () {
+      this.setCurrentIndex(this.currentIndex + 1)
+    },
+    progressClick (e) {
+      // console.log(e)
+      // let normalLeft = e.target.offsetLeft
+      // let eventLeft = e.pageX
+      // let clickLeft = eventLeft - normalLeft
+      // console.log(clickLeft)
+      // console.log(e.offsetX)
+      // 1.设置进度条前景的宽度
+      // let scale = e.offsetX / e.target.offsetWidth
+      // 解决target指向问题(点击的目标可能是progress-bar的子元素)
+      // let scale = e.offsetX / parseInt(getComputedStyle(this.$refs.progressBar).width)
+      let scale = e.offsetX / this.$refs.progressBar.offsetWidth
+      // console.log(getComputedStyle(this.$refs.progressBar).width)
+      // console.log(scale)
+      this.$refs.progressLine.style.width = scale * 100 + '%'
+      // 2.重新设置开始播放的当前时间
+      let currentTime = scale * this.totalTime
+      // console.log(currentTime)
+      this.setCurTime(currentTime)
+      // this.currentTime = currentTime 不能直接修改父组件传来的数据,要修改得去父组件修改
+      // 先把计算好的time传入vuex，父组件拿到vuex的time设置给currentTime
+    },
+    formartTime (time) {
+      // 2.得到两个时间之间的差值(秒)
+      let differSecond = time
+      // 3.利用相差的总秒数 / 每一天的秒数 = 相差的天数
+      let day = Math.floor(differSecond / (60 * 60 * 24))
+      day = day >= 10 ? day : '0' + day
+      // 4.利用相差的总秒数 / 小时 % 24;
+      let hour = Math.floor(differSecond / (60 * 60) % 24)
+      hour = hour >= 10 ? hour : '0' + hour
+      // 5.利用相差的总秒数 / 分钟 % 60;
+      let minute = Math.floor(differSecond / 60 % 60)
+      minute = minute >= 10 ? minute : '0' + minute
+      // 6.利用相差的总秒数 % 秒数
+      let second = Math.floor(differSecond % 60)
+      second = second >= 10 ? second : '0' + second
+      return {
+        day: day,
+        hour: hour,
+        minute: minute,
+        second: second
+      }
     }
   },
   computed: {
     ...mapGetters([
       'isPlaying',
-      'modeType'
+      'modeType',
+      'currentIndex'
     ])
   },
   watch: {
@@ -68,6 +133,19 @@ export default {
         this.$refs.mode.classList.remove('one')
         this.$refs.mode.classList.add('random')
       }
+    },
+    totalTime (newValue, oldValue) {
+      let time = this.formartTime(newValue)
+      this.$refs.eleTatolTime.innerHTML = time.minute + ':' + time.second
+    },
+    currentTime (newValue, oldValue) {
+      // 1.格式化当前播放的时间
+      let time = this.formartTime(newValue)
+      this.$refs.eleCurrentTime.innerHTML = time.minute + ':' + time.second
+      // 2.根据当前播放的时间progress-line和progress-bar的比例
+      // console.log(this.currentTime)
+      let scale = newValue / this.totalTime * 100 // 百分比
+      this.$refs.progressLine.style.width = scale + '%'
     }
   }
 }
@@ -95,19 +173,21 @@ export default {
       flex-grow: 1;
       /*width: 100%;*/
       height: 10px;
-      background: #f10;
-      position: relative;
+      background: #fff;
+      /*padding: 0 20px;*/
+      /*margin: 0 20px;*/
       .progress-line {
-        width: 50%;
+        width: 0;
         height: 100%;
-        background: #000;
+        background: #ccc;
+        position: relative;
         .progress-dot {
           width: 20px;
           height: 20px;
           border-radius: 50%;
           background: #fff;
           position: absolute;
-          left: 50%;
+          left: 100%;
           top: 50%;
           transform: translateY(-50%);
         }

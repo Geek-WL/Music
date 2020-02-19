@@ -6,10 +6,10 @@
         </div>
         <p>{{getFirstLyric()}}</p>
       </swiper-slide>
-      <swiper-slide class="lyric">
-        <ScrollView>
+      <swiper-slide class="lyric" ref="lyric">
+        <ScrollView ref="scrollview">
           <ul>
-            <li v-for="(value,index) in this.currentLyric" :key="index">{{value}}</li>
+            <li v-for="(value,key) in this.currentLyric" :key="key" :class="{'active': currentLineNum === key}">{{value}}</li>
           </ul>
         </ScrollView>
       </swiper-slide>
@@ -24,6 +24,13 @@ import ScrollView from '../ScrollView'
 import { mapGetters } from 'vuex'
 export default {
   name: 'PlayerMiddle',
+  props: {
+    currentTime: {
+      type: Number,
+      default: 0,
+      required: true
+    }
+  },
   components: {
     swiper,
     swiperSlide,
@@ -42,7 +49,8 @@ export default {
         observer: true,
         observerParents: true,
         observerSlideChildren: true
-      }
+      },
+      currentLineNum: '0'
     }
   },
   methods: {
@@ -50,6 +58,16 @@ export default {
     getFirstLyric () {
       for (let key in this.currentLyric) {
         return this.currentLyric[key]
+      }
+    },
+    // 此方法为让点击进度条时立即显示跳转的歌词
+    getActiveLineNum (lineNum) {
+      let result = this.currentLyric[lineNum + '']
+      if (result === undefined || result === '') {
+        lineNum--
+        return this.getActiveLineNum(lineNum)
+      } else {
+        return lineNum + ''
       }
     }
   },
@@ -66,6 +84,32 @@ export default {
         this.$refs.cdwrapper.classList.add('active')
       } else {
         this.$refs.cdwrapper.classList.remove('active')
+      }
+    },
+    currentTime (newValue, oldValue) {
+      /*
+      // 1.高亮歌词同步
+      let lineNum = Math.floor(newValue) + ''
+      let result = this.currentLyric[lineNum]
+      // console.log(result)
+      if (result !== undefined && result !== '') {
+        this.currentLineNum = lineNum
+        // 2.歌词滚动同步
+        let currentLyricTop = document.querySelector('li.active').offsetTop
+        let lyricHeight = this.$refs.lyric.$el.offsetHeight
+        if (currentLyricTop > lyricHeight / 2) {
+          this.$refs.scrollview.scrollTo(0, lyricHeight / 2 - currentLyricTop, 100)
+        }
+      }
+      */
+      let lineNum = Math.floor(newValue)
+      this.currentLineNum = this.getActiveLineNum(lineNum)
+      let currentLyricTop = document.querySelector('li.active').offsetTop
+      let lyricHeight = this.$refs.lyric.$el.offsetHeight
+      if (currentLyricTop > lyricHeight / 2) {
+        this.$refs.scrollview.scrollTo(0, lyricHeight / 2 - currentLyricTop, 100)
+      } else {
+        this.$refs.scrollview.scrollTo(0, 0, 100)
       }
     }
   }
@@ -114,7 +158,12 @@ export default {
       @include font_color();
       margin: 10px 0;
       &:last-of-type{
-        padding-bottom: 100px;
+        padding-bottom: 50%;
+      }
+      &.active {
+        color: #fff;
+        margin: 20px 0;
+        @include font_size($font_large);
       }
     }
   }

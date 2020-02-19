@@ -1,4 +1,4 @@
-import { SET_FULL_SCREEN, SET_MINI_PLAYER, SET_IS_PLAYING, SET_MODE_TYPE, SET_LIST_PLAYER, SET_SONG_DETAIL, SET_SONG_LYRIC } from './mutations-type'
+import { SET_FULL_SCREEN, SET_MINI_PLAYER, SET_IS_PLAYING, SET_MODE_TYPE, SET_LIST_PLAYER, SET_SONG_DETAIL, SET_SONG_LYRIC, SET_DEL_SONG, SET_CURRENT_INDEX, SET_CURRENT_TIME } from './mutations-type'
 import { getSongDetail, getSongLyric, getSongURL } from '../api'
 
 export default {
@@ -27,12 +27,20 @@ export default {
     let result = await getSongDetail({ ids: ids.join(',') })
     // console.log(result)
     let urls = await getSongURL({ id: ids.join(',') })
-    console.log(urls)
+    // console.log(urls)
     let list = []
     result.songs.forEach(function (value, index) {
       let obj = {}
       obj.name = value.name
-      obj.url = urls.data[index].url
+      // obj.url = urls.data[index].url
+      // 由于传入id去请求url时返回的并不是传入id时的顺序，因此需要判断id相同才赋值url
+      for (let j = 0; j < urls.data.length; j++) {
+        let item = urls.data[j]
+        if (value.id === item.id) {
+          obj.url = item.url
+          break
+        }
+      }
       let singer = ''
       value['ar'].forEach(function (item, index) {
         if (index === 1) {
@@ -53,8 +61,17 @@ export default {
     let result = await getSongLyric({ id: id })
     // console.log(result.lrc.lyric)
     let obj = parseLyric(result.lrc.lyric)
-    console.log(obj)
+    // console.log(obj)
     commit(SET_SONG_LYRIC, obj)
+  },
+  setDelSong ({ commit }, index) {
+    commit(SET_DEL_SONG, index)
+  },
+  setCurrentIndex ({ commit }, index) {
+    commit(SET_CURRENT_INDEX, index)
+  },
+  setCurTime ({ commit }, time) {
+    commit(SET_CURRENT_TIME, time)
   }
 }
 // 格式化歌词方法

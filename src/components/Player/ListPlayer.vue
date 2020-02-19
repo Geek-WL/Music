@@ -10,21 +10,21 @@
               <p v-if="this.modeType === 1">单曲循环</p>
               <p v-if="this.modeType === 2">随机播放</p>
             </div>
-            <div class="top-right">
+            <div class="top-right" @click="delAll">
               <div class="del"></div>
             </div>
           </div>
           <div class="player-middle">
             <ScrollView ref="scrollview">
-              <ul>
-                <li class="item" v-for="value in this.songs" :key="value.id">
+              <ul ref="play">
+                <li class="item" v-for="(value, index) in this.songs" :key="value.id" @click="selectMusic(index)">
                   <div class="item-left">
-                    <div class="item-play" @click="play" ref="play"></div>
+                    <div class="item-play" @click.stop="play" v-show="currentIndex === index"></div>
                     <p>{{value.name}}</p>
                   </div>
                   <div class="item-right">
                     <div class="item-favorite"></div>
-                    <div class="item-del"></div>
+                    <div class="item-del" @click.stop="del(index)"></div>
                   </div>
                 </li>
               </ul>
@@ -59,7 +59,8 @@ export default {
       'isPlaying',
       'modeType',
       'isShowListPlayer',
-      'songs'
+      'songs',
+      'currentIndex'
     ])
   },
   methods: {
@@ -79,7 +80,9 @@ export default {
     ...mapActions([
       'setIsPlaying',
       'setModeType',
-      'setListPlayer'
+      'setListPlayer',
+      'setDelSong',
+      'setCurrentIndex'
     ]),
     play () {
       this.setIsPlaying(!this.isPlaying)
@@ -92,6 +95,15 @@ export default {
       } else if (this.modeType === modeType.random) {
         this.setModeType(modeType.loop)
       }
+    },
+    del (index) {
+      this.setDelSong(index)
+    },
+    delAll () {
+      this.setDelSong()
+    },
+    selectMusic (index) {
+      this.setCurrentIndex(index)
     }
   },
   watch: {
@@ -172,6 +184,15 @@ export default {
     .player-middle {
       height: 700px;
       overflow: hidden;
+      ul {
+        &.active {
+          .item {
+            .item-play {
+              @include bg_img('../../assets/images/small_pause');
+            }
+          }
+        }
+      }
       .item {
         height: 100px;
         display: flex;
@@ -188,9 +209,6 @@ export default {
             height: 56px;
             @include bg_img('../../assets/images/small_play');
             margin-right: 20px;
-            &.active {
-              @include bg_img('../../assets/images/small_pause');
-            }
           }
           p {
             @include font_size($font_medium_s);
