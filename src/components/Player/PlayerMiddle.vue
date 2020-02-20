@@ -62,6 +62,9 @@ export default {
     },
     // 此方法为让点击进度条时立即显示跳转的歌词
     getActiveLineNum (lineNum) {
+      if (lineNum < 0) {
+        return this.currentLineNum
+      }
       let result = this.currentLyric[lineNum + '']
       if (result === undefined || result === '') {
         lineNum--
@@ -110,6 +113,13 @@ export default {
         this.$refs.scrollview.scrollTo(0, lyricHeight / 2 - currentLyricTop, 100)
       } else {
         this.$refs.scrollview.scrollTo(0, 0, 100)
+      }
+    },
+    // 获取第一句歌词的key(显示歌词无论找不找的到相应的key都高亮第一句歌词)
+    currentLyric (newValue, oldValue) {
+      for (let key in newValue) {
+        this.currentLineNum = key
+        return
       }
     }
   }

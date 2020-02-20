@@ -1,4 +1,4 @@
-import { SET_FULL_SCREEN, SET_MINI_PLAYER, SET_IS_PLAYING, SET_MODE_TYPE, SET_LIST_PLAYER, SET_SONG_DETAIL, SET_SONG_LYRIC, SET_DEL_SONG, SET_CURRENT_INDEX, SET_CURRENT_TIME } from './mutations-type'
+import { SET_FULL_SCREEN, SET_MINI_PLAYER, SET_IS_PLAYING, SET_MODE_TYPE, SET_LIST_PLAYER, SET_SONG_DETAIL, SET_SONG_LYRIC, SET_DEL_SONG, SET_CURRENT_INDEX, SET_CURRENT_TIME, SET_FAVORITE_SONG, SET_FAVORITE_LIST, SET_HISTORY_SONG, SET_HISTORY_LIST } from './mutations-type'
 export default {
   // 变量/常量作为方法名的话需要加[]
   [SET_FULL_SCREEN] (state, flag) {
@@ -55,5 +55,30 @@ export default {
   },
   [SET_CURRENT_TIME] (state, time) {
     state.curTime = time
+  },
+  [SET_FAVORITE_SONG] (state, song) {
+    let result = state.favoriteList.find(function (currentValue) {
+      return currentValue === song
+    })
+    if (result === undefined) {
+      state.favoriteList.push(song)
+    }
+  },
+  [SET_FAVORITE_LIST] (state, list) {
+    state.favoriteList = list
+  },
+  [SET_HISTORY_SONG] (state, song) {
+    let result = state.historyList.find(function (currentValue) {
+      return currentValue === song
+    })
+    if (result === undefined) {
+      if (state.historyList.length > 30) {
+        state.historyList.splice(0, 1)
+      }
+      state.historyList.push(song)
+    }
+  },
+  [SET_HISTORY_LIST] (state, list) {
+    state.historyList = list
   }
 }
