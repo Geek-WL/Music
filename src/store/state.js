@@ -11,5 +11,9 @@ export default {
   currentIndex: 0,
   currentLyric: [],
   // 点击进度条之后新的开始播放时间
-  curTime: 0
+  curTime: 0,
+  // 收藏歌单
+  favoriteList: [],
+  // 播放历史
+  historyList: []
 }
