@@ -13,6 +13,7 @@ import MiniPlayer from '../components/Player/MiniPlayer'
 import ListPlayer from '../components/Player/ListPlayer'
 import { mapGetters, mapActions } from 'vuex'
 import modeType from '../store/modeType'
+import { getRandomIntInclusive, setLocalStorage, getLocalStorage } from '../tools/tools'
 export default {
   name: 'Player',
   components: {
@@ -50,14 +51,9 @@ export default {
       } else if (this.modeType === modeType.one) {
         this.$refs.audio.play() // 重新播放
       } else if (this.modeType === modeType.random) {
-        let index = this.getRandomIntInclusive(0, this.songs.length - 1)
+        let index = getRandomIntInclusive(0, this.songs.length - 1)
         this.setCurrentIndex(index)
       }
-    },
-    getRandomIntInclusive (min, max) {
-      min = Math.ceil(min)
-      max = Math.floor(max)
-      return Math.floor(Math.random() * (max - min + 1)) + min // 含最大值，含最小值
     }
   },
   watch: {
@@ -70,7 +66,15 @@ export default {
       }
     },
     currentIndex () {
-      this.$refs.audio.oncanplay = () => {
+      // 注意点：在ios系统中不会自动加载歌曲，所以oncanplay不会自动执行
+      // 在pc端和安卓端，系统会自动加载歌曲，所以oncanplay会自动加载歌曲
+      /*
+      * 解决方案：如何监听ios中audio的歌曲是否已经准备好了？
+      *         通过ondurationchange事件来监听(适用音频和视频)
+      * ondurationchange事件什么时候执行：当歌曲加载完成之后，因为只有歌曲加载完成后才能获取到歌曲时长
+      * */
+      // this.$refs.audio.oncanplay = () => {
+      this.$refs.audio.ondurationchange = () => {
         this.totalTime = this.$refs.audio.duration
         if (this.isPlaying) {
           this.$refs.audio.play()
@@ -86,24 +90,30 @@ export default {
     favoriteList (newValue, oldValue) {
       // console.log(newValue)
       // console.log(JSON.stringify(newValue))
-      window.localStorage.setItem('favoriteList', JSON.stringify(newValue))
+      // window.localStorage.setItem('favoriteList', JSON.stringify(newValue))
+      setLocalStorage('favoriteList', newValue)
     },
     historyList (newValue, oldValue) {
-      window.localStorage.setItem('historyList', JSON.stringify(newValue))
+      // window.localStorage.setItem('historyList', JSON.stringify(newValue))
+      setLocalStorage('historyList', newValue)
     }
   },
   created () {
     // 还原收藏歌曲
-    let favoriteList = JSON.parse(window.localStorage.getItem('favoriteList'))
+    // let favoriteList = JSON.parse(window.localStorage.getItem('favoriteList'))
+    // console.log(getLocalStorage('favoriteList'))
+    let favoriteList = getLocalStorage('favoriteList')
     if (favoriteList === null) return
     this.setFavoriteList(favoriteList)
     // 还原播放历史
-    let historyList = JSON.parse(window.localStorage.getItem('historyList'))
+    // let historyList = JSON.parse(window.localStorage.getItem('historyList'))
+    // console.log(getLocalStorage('historyList'))
+    let historyList = getLocalStorage('historyList')
     if (historyList === null) return
     this.setHistoryList(historyList)
   },
   mounted () {
-    this.$refs.audio.oncanplay = () => {
+    this.$refs.audio.ondurationchange = () => {
       this.totalTime = this.$refs.audio.duration
     }
   },
