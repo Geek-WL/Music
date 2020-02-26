@@ -5,7 +5,7 @@
         <li class="list-group" v-for="(value, index) in list" :key="index" ref="group">
           <h2 class="group-title">{{keys[index]}}</h2>
           <ul>
-            <li class="group-item" v-for="obj in list[index]" :key="obj.id">
+            <li class="group-item" v-for="obj in list[index]" :key="obj.id" @click.stop="switchSinger(obj.id)">
               <img v-lazy="obj.img1v1Url" alt="">
               <p>{{obj.name}}</p>
             </li>
@@ -23,6 +23,9 @@
         :class="{'active': currentIndex===index}">{{key}}</li>
     </ul>
     <div class="fix-title" v-show="fixTitle !== ''" ref="fixTitle">{{fixTitle}}</div>
+    <transition>
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -73,13 +76,16 @@ export default {
       this.moveOffsetY = e.touches[0].pageY
       let offsetY = (this.moveOffsetY - this.beginOffsetY) / e.target.offsetHeight
       let index = parseInt(e.target.dataset.index) + Math.floor(offsetY)
-      console.log(offsetY)
+      // console.log(offsetY)
       if (index < 0) {
         index = 0
       } else if (index > this.keys.length - 1) {
         index = this.keys.length - 1
       }
       this._keyDown(index)
+    },
+    switchSinger (id) {
+      this.$router.push(`/singer/detail/${id}/singer`)
     }
   },
   watch: {
@@ -133,14 +139,16 @@ export default {
           // 1.用下一组标题的偏移位 + 当前滚动出去的偏移位
           let diffOffsetY = nextTop + y
           let fixTitleOffsetY = 0
-          // 2.判断计算的结果是否为 0 ~ 分组标题的高度值
+          // 2.判断计算的结果是否为 0 ~ 分组标题的高度值 如果满足，用计算的结果减去title的高(负数)，就是title该偏移的量
           if (diffOffsetY >= 0 && diffOffsetY <= this.fixTitleHeight) {
             fixTitleOffsetY = diffOffsetY - this.fixTitleHeight
           } else {
             fixTitleOffsetY = 0
           }
-          console.log(this.fixTitleOffsetY)
+          // console.log(this.fixTitleOffsetY)
+          // 用于判断当前次的偏移位是否和上一次的相等，如果是，return
           if (fixTitleOffsetY === this.fixTitleOffsetY) return
+          // 保存当前次的偏移位 用于下一次判断
           this.fixTitleOffsetY = fixTitleOffsetY
           this.$refs.fixTitle.style.transform = `translateY(${fixTitleOffsetY}px)`
           return
@@ -224,4 +232,26 @@ export default {
     @include bg_color();
   }
 }
+  .v-enter {
+    /*opacity: 0;*/
+    transform: translateX(100%);
+  }
+  .v-enter-to {
+    /*opacity: 1;*/
+    transform: translateX(0%);
+  }
+  .v-enter-active {
+    transition: transform 1s;
+  }
+  .v-leave {
+    /*opacity: 1;*/
+    transform: translateX(0%);
+  }
+  .v-leave-to {
+    /*opacity: 0;*/
+    transform: translateX(100%);
+  }
+  .v-leave-active {
+    transition: transform 1s;
+  }
 </style>

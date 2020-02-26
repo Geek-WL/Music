@@ -58,7 +58,7 @@ export default {
   /*overflow: hidden;*/
   li {
     width: 100%;
-    height: 100px;
+    height: 120px;
     padding: 20px;
     box-sizing: border-box;
     @include bg_sub_color();
