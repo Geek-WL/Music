@@ -38,7 +38,8 @@ export default {
       'setCurrentIndex',
       'setFavoriteList',
       'setHistorySong',
-      'setHistoryList'
+      'setHistoryList',
+      'setIsPlaying'
     ]),
     timeupdate (e) {
       // console.log(e.target.currentTime)
@@ -53,6 +54,10 @@ export default {
       } else if (this.modeType === modeType.random) {
         let index = getRandomIntInclusive(0, this.songs.length - 1)
         this.setCurrentIndex(index)
+      }
+      // 播放列表为一首歌时 终点跳转播放按钮
+      if (this.songs.length === 1) {
+        this.setIsPlaying(false)
       }
     }
   },
