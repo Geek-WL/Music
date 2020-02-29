@@ -190,7 +190,7 @@ export default {
     width: 80%;
     margin: 0 auto;
     /*background: skyblue;*/
-    padding: 50px 100px;
+    padding: 50px 80px;
     display: flex;
     justify-content: space-between;
     align-items: center;

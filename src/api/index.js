@@ -150,3 +150,5 @@ export const getTopListDetail = () => {
 export const getTopList = (data) => Network.get('top/list', data)
 // 获取搜索单曲
 export const getSearchList = (data) => Network.get('search?type=1', data)
+// 获取热搜列表
+export const getHotSearch = () => Network.get('search/hot')

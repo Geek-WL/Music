@@ -5,7 +5,12 @@ import store from './store'
 import fastclick from 'fastclick'
 import VueLazyload from 'vue-lazyload'
 import './assets/css/base.scss'
-
+// 导入自定义插件
+import Loading from './plugin/loading/index'
+// 注册自定义插件
+Vue.use(Loading, {
+  title: '正在加载...'
+})
 fastclick.attach(document.body)
 Vue.config.productionTip = false
 Vue.use(VueLazyload, {

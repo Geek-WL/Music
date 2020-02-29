@@ -113,11 +113,13 @@ export default {
         /*align-items: center;*/
         h3 {
           @include font_size($font_medium);
-          @include font_color();
+          //@include font_color();
+          color: #ddd;
         }
         p {
           @include font_size($font_medium_s);
-          @include font_color();
+          //@include font_color();
+          color: #ddd;
         }
       }
     }
