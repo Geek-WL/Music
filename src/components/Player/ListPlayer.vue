@@ -69,12 +69,12 @@ export default {
       this.setListPlayer(false)
     },
     enter (el, done) {
-      Velocity(el, 'transition.perspectiveUpIn', { duration: 500 }, function () {
+      Velocity(el, 'transition.perspectiveLeftIn', { duration: 500 }, function () {
         done()
       })
     },
     leave (el, done) {
-      Velocity(el, 'transition.perspectiveUpOut', { duration: 500 }, function () {
+      Velocity(el, 'transition.perspectiveRightOut', { duration: 500 }, function () {
         done()
       })
     },

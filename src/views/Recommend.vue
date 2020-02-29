@@ -43,7 +43,7 @@ export default {
     getBanner()
       .then((data) => {
         this.banners = data.banners
-        // console.log(this.banners)
+        // console.log(data)
       })
       .catch((data) => {
         // console.log(data)
