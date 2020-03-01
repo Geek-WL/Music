@@ -88,6 +88,7 @@ const routes = [
 const router = new VueRouter({
   // history模式部署在服务器，需要后端进行一些配置，不然一刷新会出现Not Found错误
   // 虽然可以使用hash模式(不会出现上述问题)，但hash模式不利于浏览器seo
+  // 并且如果使用了预渲染插件，那么必须为history模式
   mode: 'history',
   // mode: 'hash',
   base: process.env.BASE_URL,

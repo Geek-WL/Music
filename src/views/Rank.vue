@@ -41,8 +41,11 @@
 <script>
 import { getTopListDetail } from '../api'
 import ScrollView from '../components/ScrollView'
+import MetaInfo from '../../vue-meta-info'
+
 export default {
   name: 'Rank',
+  metaInfo: MetaInfo.rank,
   components: {
     ScrollView
   },
