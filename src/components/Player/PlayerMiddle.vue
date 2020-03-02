@@ -72,6 +72,18 @@ export default {
       } else {
         return lineNum + ''
       }
+    },
+    getLastLyric (n) {
+      let arr = []
+      for (let key in this.currentLyric) {
+        arr.push(key)
+      }
+      // if (arr[arr.length - 1] === '') {
+      //   return arr[arr.length - 2]
+      // }
+      // console.log(arr[arr.length - 1])
+      // console.log(typeof arr[arr.length - 1])
+      return arr[arr.length - n]
     }
   },
   computed: {
@@ -108,10 +120,23 @@ export default {
       let lineNum = Math.floor(newValue)
       this.currentLineNum = this.getActiveLineNum(lineNum)
       let currentLyricTop = document.querySelector('li.active').offsetTop
+      // let currentLyricTop1 = document.querySelector('li.active')
+      // console.log(this.currentLyric)
+      // this.getLastLyric()
+      // console.log(this.currentLyric)
       let lyricHeight = this.$refs.lyric.$el.offsetHeight
       if (currentLyricTop > lyricHeight / 2) {
-        this.$refs.scrollview.scrollTo(0, lyricHeight / 2 - currentLyricTop, 100)
+        // console.log('111')
+        if (this.getLastLyric(1) !== this.currentLineNum) {
+          // console.log(parseInt(this.getLastLyric()))
+          // console.log(parseInt(this.currentLineNum))
+          this.$refs.scrollview.scrollTo(0, lyricHeight / 2 - currentLyricTop, 100)
+        }
+        // console.log('222')
+        // console.log(parseInt(this.getLastLyric()))
+        // console.log(typeof this.currentLineNum)
       } else {
+        // console.log('888')
         this.$refs.scrollview.scrollTo(0, 0, 100)
       }
     },
